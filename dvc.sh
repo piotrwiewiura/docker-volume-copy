@@ -16,7 +16,7 @@ NEW_VOLUME_NAME="$2"
 echo "== From '$OLD_VOLUME_NAME' to '$NEW_VOLUME_NAME' =="
 
 function isVolumeExists {
-    local isOldExists=$(docker volume inspect "$1" 2>/dev/null | grep '"Name":')
+    local isOldExists=$(docker volume inspect "$1" | grep '"Name":')
     local isOldExists=${isOldExists#*'"Name": "'}
     local isOldExists=${isOldExists%'",'}
     local isOldExists=${isOldExists##*( )}
@@ -53,7 +53,8 @@ fi
 docker run --rm --volume ${OLD_VOLUME_NAME}:/source --volume ${NEW_VOLUME_NAME}:/destination ubuntu:latest bash -c "echo 'copying volume ...'; cp -Rp /source/* /destination/"
 
 if [[ "$?" -eq 0 ]]; then
-    echo "Done successfuly 🎉"
+    echo "Done successfuly"
 else
-    echo "Some error occured 😭"
+    echo "Some error occured"
+    exit 1
 fi
